@@ -1,0 +1,43 @@
+import cv2
+import numpy as np
+
+img = cv2.imread("OpenCV\cat.jpg",cv2.IMREAD_COLOR)
+cv2.imshow('ORiginal img',img)  
+cv2.waitKey(0)
+
+#BGR to grey
+
+gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+cv2.imshow("gray img",gray)
+cv2.waitKey(0)
+
+gray_blured = cv2.blur(gray,(9,9))
+cv2.imshow("gray blured img",gray_blured)
+cv2.waitKey(0)
+
+'''
+cv2.HoughCircles() :used to detect circles in an image
+ using the Hough Circle Transfrom.which is uded to detect 
+ shapes like lines or circles in images  
+
+'''
+detect_circles=cv2.HoughCircles(gray_blured,
+                                cv2.HOUGH_GRADIENT,
+                                dp=1,minDist=20,
+                                param1 = 50,
+                                param2 = 30,
+                                minradius = 1,
+                                
+                                maxRaduis = 40)
+
+if detect_circles is not None:
+    detect_circles = np.uinit16(np.around(detect_circles))
+    for pt in detect_circles[0,:]:
+            a,b,r = pt[0],pt[1],pt[2]
+            cv2.circlw(img,(a,b),r,(0,255,0),2)
+            cv2.circle(img,(a,b),1,(0,0,255),3)
+            cv2.imshow("Detected Circles",img)
+            cv2.waitKey(0)
+
+cv2.destroyAllWindows()
+   
