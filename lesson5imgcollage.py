@@ -2,8 +2,11 @@ import cv2
 import os
 from PIL import Image
 
-os.chdir(r"OpenCV\lesson5img")
-path = r"OpenCV\lesson5img"
+#os.chdir(r"C:\Users\gohar\OneDrive\Desktop\JETLEARN\OpenCV\lesson5img")
+#path = r"C:\Users\gohar\OneDrive\Desktop\JETLEARN\OpenCV\lesson5img"
+
+os.chdir(r"C:\Users\gohar\OneDrive\Desktop\JETLEARN\OpenCV\lesson5img")
+path = r"C:\Users\gohar\OneDrive\Desktop\JETLEARN\OpenCV\lesson5img"
 mean_height = 0
 mean_width = 0 
 
@@ -13,8 +16,11 @@ for file in os.listdir('.'):
     
     img = Image.open(os.path.join(path,file))
     width,height = img.size
-    mean_width = mean_width+width
-    mean_height = mean_height+height
+    mean_width = mean_width + width
+    mean_height = mean_height + height
+
+    mean_height = mean_height // num_of_images
+    mean_width = mean_width // num_of_images
 
     print(mean_width)
     print(mean_height)
@@ -26,7 +32,8 @@ for file in os.listdir('.'):
             print(width, height)
 
             imgResized = img.resize((mean_width,mean_height),Image.LANCZOS)
-            print(img.filename.split('\\'[-1]), "is resized")
+            imgResized.save(file,'JPEG',quality = 95)
+            print(img.filename.split('\\')[-1], "is resized")
 
 
 
@@ -35,3 +42,20 @@ for file in os.listdir('.'):
 def videoGenerator():
     video_name = "MyFristVideo.avi"
     os.chdir(r"OpenCV\lesson5img")
+    images = []
+    for img in os.lisdir('.'):
+        if img.endswiyh('.jpg')or img.endswith('.jpeg') or img.endswith('.png'):
+            images.append(img)
+
+    print(images)
+
+    frame = cv2.imread(os.path.join(".",images[0]))
+    height,width,layer = frame.shape
+    video = cv2.VideoWriter(video_name,0,1,(width,height))
+    for image in images:
+        video.write(cv2.imread(os.path.join(".",image)))  
+
+    cv2.destroyAllWindows()
+    video.release()
+    print("video Generated")
+videoGenerator()
